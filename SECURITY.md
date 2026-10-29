@@ -6,13 +6,16 @@ results are recorded in docs/VALIDATION.md.
 
 The application source contains no network client, telemetry, shell command
 execution, auto-update, credential collection or remote-control feature.
-Build tools download dependencies; runtime works offline. The launcher starts
-only the included JVM. Eclipse MAT, Equinox, JRE and Maven dependencies remain
+Build tools download dependencies; runtime works offline. Launchers start the included JVM; the Windows CMD entry point first invokes
+the Windows-provided PowerShell script. Eclipse MAT, Equinox, JRE and Maven dependencies remain
 part of the trust boundary; a source review is not a proof about every binary.
 
 The bundle pins official MAT and Temurin downloads and checks cryptographic
-hashes before extraction. MAT's SHA-512 was checked against Eclipse's published
-checksum. Temurin's SHA-256 comes from Adoptium's release metadata. Build on a
+hashes before extraction. MAT hashes are pinned per platform; the macOS ARM64 hash was computed from
+the official HTTPS archive because Eclipse's checksum endpoint did not provide
+one. Other MAT hashes were checked against Eclipse's published checksums.
+JRE hashes come from Adoptium/GitHub release metadata. Provenance is recorded
+in the lock file. Build on a
 trusted machine and verify the generated SHA256SUMS before first use.
 
 Heap dumps and JSON/results can contain secrets. MAT writes indexes and thread

@@ -11,3 +11,5 @@ Corresponding Temurin source for the bundled runtime:
 https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk-sources_21.0.13_9.tar.gz
 Eclipse MAT source:
 https://github.com/eclipse-mat/mat
+Windows bundle JRE corresponding source (Temurin 21.0.12.1+1):
+https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jdk-sources_21.0.12.1_1.tar.gz

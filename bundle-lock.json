@@ -1,11 +1,66 @@
 {
-  "platform": "linux-x86_64",
-  "mat": {
-    "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-linux.gtk.x86_64.zip",
-    "sha512": "a4127c587d425cbe7167873fdc1337950ee7c01bf15dd429b6ad3f26e8ba3bbd0aee9a693aff60f25d6068c9e817b1de617ac94c85ece15a48fda17c1b9b12cd"
-  },
-  "jre": {
-    "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_x64_linux_hotspot_21.0.13_9.tar.gz",
-    "sha256": "a535a1df9c6284d9618872984e026ae0352d1f7e9e0605425c0e6114f47351dd"
+  "schema": 2,
+  "mat_version": "1.17.0",
+  "platforms": {
+    "linux-x86_64": {
+      "mat": {
+        "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-linux.gtk.x86_64.zip",
+        "sha512": "a4127c587d425cbe7167873fdc1337950ee7c01bf15dd429b6ad3f26e8ba3bbd0aee9a693aff60f25d6068c9e817b1de617ac94c85ece15a48fda17c1b9b12cd",
+        "checksum_source": "eclipse-published"
+      },
+      "jre": {
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_x64_linux_hotspot_21.0.13_9.tar.gz",
+        "sha256": "a535a1df9c6284d9618872984e026ae0352d1f7e9e0605425c0e6114f47351dd",
+        "version": "21.0.13+9"
+      }
+    },
+    "linux-aarch64": {
+      "mat": {
+        "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-linux.gtk.aarch64.zip",
+        "sha512": "8dc5c85c6f09813826c8bd3d9cf3748020d271e3e446f531fe90698a9800e91c5ad3a87a4c66a2f105dbd5d43d9919434ec2f44391dc03621050cd76f962fe4b",
+        "checksum_source": "eclipse-published"
+      },
+      "jre": {
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_aarch64_linux_hotspot_21.0.13_9.tar.gz",
+        "sha256": "b1734db7ade49c3f6acc6ae06233b8c2dd90e3e2f00f67000ae1c972aaa64d8c",
+        "version": "21.0.13+9"
+      }
+    },
+    "macos-x86_64": {
+      "mat": {
+        "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-macosx.cocoa.x86_64.zip",
+        "sha512": "0cbeb5ca142b0df9359d53bf4764bb924e679dfee870ca62bd2fd9ddf14b10a687f31e36d937bd5b16b50e2d17a0fccd967f94ca304c34786bde29e2dd15b021",
+        "checksum_source": "eclipse-published"
+      },
+      "jre": {
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_x64_mac_hotspot_21.0.13_9.tar.gz",
+        "sha256": "c909674b1c10c261b9a3fb7e9c0efebd303e33f88a4fe84be7135b5e2d711f89",
+        "version": "21.0.13+9"
+      }
+    },
+    "macos-aarch64": {
+      "mat": {
+        "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-macosx.cocoa.aarch64.zip",
+        "sha512": "1732de4e56733bb13b17ff5c4d9050e0949ed3379cd34ea7b70c2f2fd7a5d67f6cd274decaa82f916ecb71b4945ddc1879cba1d559a58c843958eb2b155b47c3",
+        "checksum_source": "downloaded-official-archive"
+      },
+      "jre": {
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_aarch64_mac_hotspot_21.0.13_9.tar.gz",
+        "sha256": "225bab0a09491ef06835488cd942f5d2befa9a0410a2484f0c8bbcf7506ec09a",
+        "version": "21.0.13+9"
+      }
+    },
+    "windows-x86_64": {
+      "mat": {
+        "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-win32.win32.x86_64.zip",
+        "sha512": "066f00215dee5919df200c6b8dbacc3ddab245249976544ca20f5ef9d5886351bfcb0078d934902128e1da41582d370ce109e895d8aaddedca51ee9f8309e356",
+        "checksum_source": "eclipse-published"
+      },
+      "jre": {
+        "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.12.1%2B1/OpenJDK21U-jre_x64_windows_hotspot_21.0.12.1_1.zip",
+        "sha256": "d35f31e712f0fcf6ac5a093edc90204fbff22f720ba3950bd09d331d5e621636",
+        "version": "21.0.12.1+1"
+      }
+    }
   }
 }

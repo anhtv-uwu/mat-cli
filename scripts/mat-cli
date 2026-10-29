@@ -16,6 +16,6 @@ if [[ ${#launchers[@]} != 1 || ! -f "${launchers[0]}" || ! -x "$root/jre/bin/jav
   echo 'Incomplete bundle: expected bundled JRE and one Equinox launcher' >&2
   exit 1
 fi
-exec "$root/jre/bin/java" "-Xmx$heap" -Djava.awt.headless=true \
+exec "$root/jre/bin/java" "-Xmx$heap" -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 \
   -jar "${launchers[0]}" -nosplash -data @none \
   -configuration "$root/mat/configuration" -application "$application" "$@"
