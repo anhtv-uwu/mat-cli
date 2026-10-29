@@ -75,6 +75,20 @@ class BundleTest(unittest.TestCase):
             bundle.extract_zip(archive, root / 'output')
             self.assertEqual((root / 'output/bin/java').stat().st_mode & 0o777, 0o755)
 
+    @unittest.skipUnless(__import__('os').name == 'nt', 'Windows read-only file handling')
+    def test_windows_readonly_archive_can_be_cleaned(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            archive = root / 'readonly.zip'
+            info = zipfile.ZipInfo('bin/server/classes.jsa')
+            info.external_attr = (stat.S_IFREG | 0o444) << 16
+            with zipfile.ZipFile(archive, 'w') as stream:
+                stream.writestr(info, 'fixture')
+            bundle.extract_zip(archive, root / 'output')
+            shutil.rmtree(root / 'output')
+            self.assertFalse((root / 'output').exists())
+
     def test_plugin_registration_preserves_existing_bundles(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

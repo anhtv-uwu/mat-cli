@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import shutil
@@ -68,7 +69,12 @@ def extract_zip(path, destination):
             else:
                 archive.extract(member, destination)
                 if mode & 0o777 and not member.is_dir():
-                    target.chmod(mode & 0o777)
+                    permissions = mode & 0o777
+                    # Unix archive modes can mark files read-only on Windows,
+                    # preventing normal cleanup even when the user owns them.
+                    if os.name == 'nt':
+                        permissions |= stat.S_IWRITE
+                    target.chmod(permissions)
 
 
 def extract(path, destination):
