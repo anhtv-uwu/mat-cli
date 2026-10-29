@@ -17,6 +17,11 @@ jobs:
         run: |
           export JAVA_HOME="$JAVA_HOME_21_X64"
           export PATH="$JAVA_HOME/bin:$PATH"
+          curl --fail --location --retry 3 -o "$RUNNER_TEMP/maven.tar.gz" https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.16/apache-maven-3.9.16-bin.tar.gz
+          echo "831a8591fe20c8243b1dbe7d71e3244f31d1665b0804b2e825e38cbbe5ce0cafb8338851f90780735568773e0a6cd07bbec107cda0b896b008b861075358b6f6  $RUNNER_TEMP/maven.tar.gz" | sha512sum --check
+          tar -xzf "$RUNNER_TEMP/maven.tar.gz" -C "$RUNNER_TEMP"
+          export PATH="$RUNNER_TEMP/apache-maven-3.9.16/bin:$PATH"
+          mvn --version
           mvn -B verify
           python3 scripts/bundle.py
           python3 scripts/smoke.py build/mat-cli-linux-x86_64/mat-cli

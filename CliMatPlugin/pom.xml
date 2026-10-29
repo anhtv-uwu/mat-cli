@@ -36,6 +36,7 @@
                 <!--Workaround to support Maven dependencies. -->
                 <!--Copy CliMatDependencies JAR to target/dependencies-->
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.7.0</version>
                 <executions>
                     <execution>
                         <id>copy-CliMatDependencies-JAR</id>

@@ -52,7 +52,7 @@ use the new commands when an agent needs reliable JSON and exit codes.
 
 ## Build
 
-Requirements: Linux x86_64, JDK 21, Maven 3.9+, Python 3.12+, network for build.
+Requirements: Linux x86_64, JDK 21, Maven 3.9.16, Python 3.12+, network for build.
 
 ```bash
 mvn -B verify
