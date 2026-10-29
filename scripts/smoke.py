@@ -13,9 +13,9 @@ LAUNCH = (['powershell.exe', '-NoLogo', '-NoProfile', '-NonInteractive', '-Execu
 ROOT = Path(__file__).resolve().parent.parent
 checks = 0
 
-def invoke(*args, status=0):
+def invoke(*args, status=0, cwd=None):
     global checks
-    p = subprocess.run([*LAUNCH, *map(str, args)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120)
+    p = subprocess.run([*LAUNCH, *map(str, args)], capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=120, cwd=cwd)
     assert p.returncode == status, (args, p.returncode, p.stdout, p.stderr)
     result = json.loads(p.stdout)
     assert result['ok'] == (status == 0), result
@@ -23,10 +23,11 @@ def invoke(*args, status=0):
     return result.get('result')
 
 with tempfile.TemporaryDirectory(prefix='mat cli smoke ') as work:
-    heap = Path(work) / 'fixture with spaces.hprof'
+    heap = Path(work) / 'fixture tiếng Việt with spaces.hprof'
     subprocess.run(['java', str(ROOT / 'scripts/HeapFixture.java'), str(heap)], check=True, timeout=60)
     info = invoke('info', heap)
     assert info['objects'] > 256 and info['usedHeapBytes'] > 128 * 4096
+    assert invoke('info', heap.name, cwd=heap.parent)['objects'] == info['objects']
     hist = invoke('histogram', heap, '--limit', 3)
     assert len(hist['rows']) == 3 and hist['total'] > 3
     assert hist['rows'][0]['shallowBytes'] >= hist['rows'][1]['shallowBytes']
@@ -47,7 +48,7 @@ with tempfile.TemporaryDirectory(prefix='mat cli smoke ') as work:
     quoted = invoke('oql', heap, 'SELECT "quoted value" AS "column with spaces" FROM java.lang.String', '--limit', 2)
     assert quoted['rows'][0]['column with spaces'] == 'quoted value'
     unicode_result = invoke('oql', heap, 'SELECT "tiếng Việt" AS "unicode" FROM java.lang.String', '--limit', 1)
-    assert unicode_result['rows'][0]['unicode'] == 'tiếng Việt'
+    assert unicode_result['rows'][0]['unicode'] == 'tiếng Việt', ascii(unicode_result)
     invoke('info', heap, '--limit', 0, status=2)
     invoke('info', heap, '--offset', -1, status=2)
     invoke('info', heap, '--limit', status=2)
@@ -74,8 +75,8 @@ with tempfile.TemporaryDirectory(prefix='mat cli smoke ') as work:
     checks += 1
 if os.name == 'nt':
     # Exercise the native CMD entry point as well as the PowerShell entry point.
-    command = '""' + str(CLI.with_suffix('.cmd')) + '" --help"'
-    result = subprocess.run(['cmd.exe', '/d', '/s', '/c', command], capture_output=True, text=True, timeout=30)
+    command = 'cmd.exe /d /s /c ""' + str(CLI.with_suffix('.cmd')) + '" --help"'
+    result = subprocess.run(command, capture_output=True, text=True, timeout=30)
     assert result.returncode == 0 and 'histogram' in result.stdout, result.stderr
     checks += 1
 print(f'{checks} integration checks passed on MAT 1.17')

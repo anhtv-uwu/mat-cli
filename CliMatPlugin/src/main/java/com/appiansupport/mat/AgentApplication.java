@@ -20,7 +20,7 @@ public final class AgentApplication implements IApplication {
       + "Use mat-cli legacy <heap.hprof> -c for the original interactive CLI.";
 
   @Override public Object start(IApplicationContext context) {
-    return run((String[]) context.getArguments().get("application.args"));
+    return run(ArgumentTransport.decode((String[]) context.getArguments().get("application.args")));
   }
   int run(String[] args) {
     PrintStream output = System.out;
@@ -47,7 +47,7 @@ public final class AgentApplication implements IApplication {
       }
       if (limit < 1 || limit > 10000 || offset < 0) throw new IllegalArgumentException("limit must be 1..10000; offset must be >= 0");
       if (Set.of("object", "references", "gc-roots", "oql", "query").contains(command) && value == null) throw new IllegalArgumentException("Missing value for " + command);
-      File heap = new File(args[1]);
+      File heap = ArgumentTransport.heapFile(args[1]);
       if (!heap.isFile()) throw new IllegalArgumentException("Heap dump does not exist: " + heap);
       var listener = new ConsoleProgressListener(System.err);
       snapshot = SnapshotFactory.openSnapshot(heap, listener);
@@ -149,6 +149,7 @@ public final class AgentApplication implements IApplication {
     if (value instanceof IObject) return describe((IObject) value);
     return String.valueOf(value);
   }
+  // ASCII JSON avoids platform console code pages changing Unicode output.
   static String json(Object value) {
     if (value == null) return "null";
     if (value instanceof Double && !Double.isFinite((Double) value)) return "null";
@@ -169,7 +170,7 @@ public final class AgentApplication implements IApplication {
       switch(c) {
         case '"': b.append("\\\""); break;
         case '\\': b.append("\\\\"); break;
-        default: if (c < 32 || Character.isSurrogate(c)) b.append(String.format("\\u%04x", (int)c)); else b.append(c);
+        default: if (c < 32 || c > 126) b.append(String.format("\\u%04x", (int)c)); else b.append(c);
       }
     }
     return b.append('"').toString();

@@ -21,7 +21,8 @@ a Windows JRE at lock creation. Its archive/version and SHA-256 are explicit in
 from the official Eclipse HTTPS archive; the published checksum endpoint returned
 "Unable to locate sums". The other MAT hashes came from that endpoint.
 
-The shared Java build runs the 92 existing unit tests. Packaging tests cover host
+The shared Java build runs the 92 existing unit tests plus five launcher/JSON
+transport regression tests. Packaging tests cover host
 aliases, archive layouts, path traversal rejection, unsafe links, executable
 permissions and plugin registration. Each native job builds an archive, extracts
 it into a new path containing spaces, verifies its per-file SHA256SUMS, removes
@@ -37,3 +38,10 @@ covers Linux x86_64 and remains a historical record.
 The matrix covers these OS/CPU combinations, not every distribution or OS
 version. Linux packages use glibc, macOS bundles are not notarized installers,
 and Windows ARM64 is not offered by the MAT 1.17 RCP distribution used here.
+
+Windows uses an ASCII-only JVM bootstrap command and an explicit UTF-8/Base64
+argument transport, preserving Unicode, embedded quotes, empty arguments and
+the caller's original working directory. JSON escapes non-ASCII characters using
+standard JSON escapes. Heap filenames and OQL Unicode values are exercised on
+all five platforms. Java 21's native launcher still requires a bundle installation
+path representable in its Windows code page; use an ASCII-only installation path.

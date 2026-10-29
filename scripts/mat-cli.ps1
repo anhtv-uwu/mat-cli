@@ -25,12 +25,21 @@ function ConvertTo-NativeArgument([string] $value) {
     $escaped = [regex]::Replace($escaped, '(\\+)$', '$1$1')
     return '"' + $escaped + '"'
 }
-$nativeArguments = @("-Xmx$heapSize", '-Djava.awt.headless=true', '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8', '-jar', $launchers[0].FullName,
-    '-nosplash', '-data', '@none', '-configuration', (Join-Path $root 'mat/configuration'),
-    '-application', $application) + $userArguments
+# Java 21's Windows launcher can lose non-ANSI characters in native argv.
+# Send the original working directory and user argv as UTF-8/Base64; the app
+# decodes them before normal CLI parsing. No commands or scripts are evaluated.
+$originalDirectory = (Get-Location).ProviderPath
+$payload = (@($originalDirectory) + $userArguments) -join [char]0
+$encodedArguments = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($payload))
+$nativeArguments = @("-Xmx$heapSize", '-Djava.awt.headless=true', '-Dfile.encoding=UTF-8',
+    '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8', "-Dmat.cli.arguments=$encodedArguments",
+    '-jar', ('plugins/' + $launchers[0].Name), '-nosplash', '-data', '@none',
+    '-configuration', 'configuration', '-application', $application)
 $startInfo = New-Object System.Diagnostics.ProcessStartInfo
 $startInfo.FileName = $java
 $startInfo.UseShellExecute = $false
+# Relative JVM/bootstrap paths also support a bundle path containing Unicode.
+$startInfo.WorkingDirectory = Join-Path $root 'mat'
 $startInfo.Arguments = ($nativeArguments | ForEach-Object { ConvertTo-NativeArgument $_ }) -join ' '
 try {
     $process = [System.Diagnostics.Process]::Start($startInfo)

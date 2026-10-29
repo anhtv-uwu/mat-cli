@@ -98,6 +98,14 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\mat-cli.ps1 histogram 
 $env:MAT_CLI_HEAP = '4g'
 ```
 
+JSON strings use standard Unicode escapes so Windows console code pages cannot
+change the returned data. The Windows launcher transports Unicode arguments as
+UTF-8/Base64, then the application decodes them before normal option parsing and
+resolves relative heap paths against the caller's working directory. No script
+or expression is evaluated by that transport. Extract the Windows bundle into
+an ASCII-only installation path to avoid Java 21 native launcher path limitations;
+heap paths and OQL values can contain Unicode.
+
 The CMD wrapper uses the Windows-provided PowerShell, with a process-local
 execution policy; it does not change the machine policy. The PowerShell launcher
 quotes native JVM arguments explicitly, including embedded quotes in OQL.

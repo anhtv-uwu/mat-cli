@@ -59,7 +59,7 @@ public class Executor implements IApplication {
 
   @Override public Object start(IApplicationContext context) {
     String[] args = (String[]) context.getArguments().get("application.args");
-    execute(args);
+    execute(ArgumentTransport.decode(args));
     return IApplication.EXIT_OK;
   }
 
@@ -88,7 +88,7 @@ public class Executor implements IApplication {
     if (cmd.getArgList().size() != 1) {
       throw new IllegalArgumentException("Expected exactly one heap dump path");
     }
-    File heapFile = new File(cmd.getArgList().get(0));
+    File heapFile = ArgumentTransport.heapFile(cmd.getArgList().get(0));
 
     if (!heapFile.isFile()) {
       System.err.println("ERROR: Heap dump file " + args[0] + " not found");
