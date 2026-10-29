@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+heap="${MAT_CLI_HEAP:-2g}"
+if [[ ! "$heap" =~ ^[1-9][0-9]*[mMgG]$ ]]; then
+  echo 'MAT_CLI_HEAP must be a positive size, for example 2g or 4096m' >&2
+  exit 2
+fi
+application=CliMatPlugin.agent
+if [[ "${1:-}" == legacy ]]; then
+  application=CliMatPlugin.execute
+  shift
+fi
+launchers=("$root"/mat/plugins/org.eclipse.equinox.launcher_*.jar)
+if [[ ${#launchers[@]} != 1 || ! -f "${launchers[0]}" || ! -x "$root/jre/bin/java" ]]; then
+  echo 'Incomplete bundle: expected bundled JRE and one Equinox launcher' >&2
+  exit 1
+fi
+exec "$root/jre/bin/java" "-Xmx$heap" -Djava.awt.headless=true \
+  -jar "${launchers[0]}" -nosplash -data @none \
+  -configuration "$root/mat/configuration" -application "$application" "$@"

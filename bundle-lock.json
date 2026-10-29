@@ -1,0 +1,11 @@
+{
+  "platform": "linux-x86_64",
+  "mat": {
+    "url": "https://download.eclipse.org/mat/1.17.0/rcp/MemoryAnalyzer-1.17.0.20260601-linux.gtk.x86_64.zip",
+    "sha512": "a4127c587d425cbe7167873fdc1337950ee7c01bf15dd429b6ad3f26e8ba3bbd0aee9a693aff60f25d6068c9e817b1de617ac94c85ece15a48fda17c1b9b12cd"
+  },
+  "jre": {
+    "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jre_x64_linux_hotspot_21.0.13_9.tar.gz",
+    "sha256": "a535a1df9c6284d9618872984e026ae0352d1f7e9e0605425c0e6114f47351dd"
+  }
+}

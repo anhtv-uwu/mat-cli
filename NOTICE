@@ -1,0 +1,13 @@
+MAT CLI is derived from Appian cli-mat-plugin (Apache-2.0).
+Upstream: https://github.com/appian/cli-mat-plugin
+Source baseline: 28de18537cf6aa19c289adaa3bc6e9a0dd03ccc1
+Copyright and license notices in upstream source are retained.
+Changes: agent JSON interface, MAT 1.17 bundle, safer lifecycle and build,
+updated dependencies and separate test-only dependencies.
+Eclipse MAT and Temurin are distributed under their own licenses, retained
+inside their respective mat/ and jre/ directories in the generated bundle.
+
+Corresponding Temurin source for the bundled runtime:
+https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk-sources_21.0.13_9.tar.gz
+Eclipse MAT source:
+https://github.com/eclipse-mat/mat

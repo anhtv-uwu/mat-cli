@@ -1,0 +1,29 @@
+name: Verify MAT 1.17 bundle
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build, test and assemble
+        shell: bash
+        run: |
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          mvn -B verify
+          python3 scripts/bundle.py
+          python3 scripts/smoke.py build/mat-cli-linux-x86_64/mat-cli
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: mat-cli-linux-x86_64
+          path: |
+            build/mat-cli-linux-x86_64.tar.gz
+            build/mat-cli-linux-x86_64.tar.gz.sha256
+          if-no-files-found: error
