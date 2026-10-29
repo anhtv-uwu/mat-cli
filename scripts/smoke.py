@@ -24,7 +24,11 @@ def invoke(*args, status=0, cwd=None):
 
 with tempfile.TemporaryDirectory(prefix='mat cli smoke ') as work:
     heap = Path(work) / 'fixture tiếng Việt with spaces.hprof'
-    subprocess.run(['java', str(ROOT / 'scripts/HeapFixture.java'), str(heap)], check=True, timeout=60)
+    # Keep the fixture JVM's bootstrap argv ASCII on Java 21/Windows, then
+    # rename with the OS Unicode API. The CLI must still read the Unicode path.
+    generated_heap = Path(work) / 'generated.hprof'
+    subprocess.run(['java', str(ROOT / 'scripts/HeapFixture.java'), str(generated_heap)], check=True, timeout=60)
+    generated_heap.rename(heap)
     info = invoke('info', heap)
     assert info['objects'] > 256 and info['usedHeapBytes'] > 128 * 4096
     assert invoke('info', heap.name, cwd=heap.parent)['objects'] == info['objects']
